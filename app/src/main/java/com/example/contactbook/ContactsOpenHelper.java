@@ -58,4 +58,38 @@ public class ContactsOpenHelper extends SQLiteOpenHelper {
         db.insert(TABLE_CONTACTS, null, values);
         db.close();
     }
+
+    public Cursor getAllContacts() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(
+                TABLE_CONTACTS,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        return cursor;
+    }
+
+    public void updateContact(int id, String name, String phone, String email, String category, String phoneType) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME, name);
+        values.put(COLUMN_PHONE, phone);
+        values.put(COLUMN_EMAIL, email);
+        values.put(COLUMN_CATEGORY, category);
+        values.put(COLUMN_PHONE_TYPE, phoneType);
+
+        db.update(TABLE_CONTACTS, values, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public void deleteContact(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_CONTACTS, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
 }
